@@ -97,7 +97,7 @@ public class JDTCompiler extends AbstractCompiler {
 
         CompilerResult messages;
 
-        if (config.isFork()) {
+        if (false && config.isFork()) {
             String executable = config.getExecutable();
 
             if (StringUtils.isEmpty(executable)) {
