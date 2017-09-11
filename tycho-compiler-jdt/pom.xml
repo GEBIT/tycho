@@ -22,6 +22,7 @@
 	<artifactId>tycho-compiler-jdt</artifactId>
 
 	<name>Tycho JDT Compiler Component</name>
+	<version>1.0.0-nofork</version>
 
 	<build>
 		<plugins>
