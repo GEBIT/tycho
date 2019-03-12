@@ -21,6 +21,7 @@ import org.eclipse.tycho.core.utils.TychoProjectUtils;
 public abstract class AbstractArtifactBasedProject extends AbstractTychoProject {
     // this is stricter than Artifact.SNAPSHOT_VERSION
     public static final String SNAPSHOT_VERSION = "-SNAPSHOT";
+    private static final String SUFFIX_QUALIFIER = ".qualifier";
 
     // requires resolved target platform
     @Override
@@ -33,7 +34,8 @@ public abstract class AbstractArtifactBasedProject extends AbstractTychoProject 
         return newDependencyWalker(project, environment);
     }
 
-    protected abstract ArtifactDependencyWalker newDependencyWalker(MavenProject project, TargetEnvironment environment);
+    protected abstract ArtifactDependencyWalker newDependencyWalker(MavenProject project,
+            TargetEnvironment environment);
 
     @Override
     public void checkForMissingDependencies(MavenProject project) {
@@ -47,7 +49,9 @@ public abstract class AbstractArtifactBasedProject extends AbstractTychoProject 
     protected String getOsgiVersion(ReactorProject project) {
         String version = project.getVersion();
         if (version.endsWith(SNAPSHOT_VERSION)) {
-            version = version.substring(0, version.length() - SNAPSHOT_VERSION.length()) + ".qualifier";
+//            version = version.substring(0, version.length() - SNAPSHOT_VERSION.length()) + ".qualifier";
+            int index = version.indexOf('-');
+            return version.substring(0, index) + SUFFIX_QUALIFIER;
         }
         return version;
     }

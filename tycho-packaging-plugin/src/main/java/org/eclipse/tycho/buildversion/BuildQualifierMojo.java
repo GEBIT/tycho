@@ -198,7 +198,9 @@ public class BuildQualifierMojo extends AbstractVersionMojo {
     private String getUnqualifiedVersion() {
         String version = project.getArtifact().getVersion();
         if (version.endsWith("-" + Artifact.SNAPSHOT_VERSION)) {
-            version = version.substring(0, version.length() - Artifact.SNAPSHOT_VERSION.length() - 1);
+//            version = version.substring(0, version.length() - Artifact.SNAPSHOT_VERSION.length() - 1);
+            int index = version.indexOf('-');
+            version = version.substring(0, index);
         }
         return version;
     }

@@ -280,6 +280,16 @@ public class VersionsEngineTest extends AbstractVersionChangeTest {
         Versions.assertIsOsgiVersion("1.2.3.qualifier");
     }
 
+    public void testVersions() {
+        assertEquals("1.2.3", Versions.toBaseVersion("1.2.3-FEATURE-SNAPSHOT"));
+        assertEquals("1.2.3", Versions.toBaseVersion("1.2.3-SNAPSHOT"));
+        assertEquals("1.2.3", Versions.toCanonicalVersion("1.2.3"));
+        assertEquals("1.2.3.qualifier", Versions.toCanonicalVersion("1.2.3-SNAPSHOT"));
+        assertEquals("1.2.3.qualifier", Versions.toCanonicalVersion("1.2.3-FEATURE-SNAPSHOT"));
+        assertEquals("1.2.3", Versions.toMavenVersion("1.2.3"));
+        assertEquals("1.2.3-SNAPSHOT", Versions.toMavenVersion("1.2.3.qualifier"));
+    }
+
     public void testBuildPluginManagement() throws Exception {
         File basedir = TestUtil.getBasedir("projects/pluginmanagement");
 

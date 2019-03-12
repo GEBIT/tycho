@@ -95,9 +95,13 @@ public class SourcesBundleDependencyMetadataGenerator extends AbstractMetadataGe
         if (version == null) {
             return null;
         }
+
         if (version.endsWith(SUFFIX_SNAPSHOT)) {
-            return version.substring(0, version.length() - SUFFIX_SNAPSHOT.length()) + SUFFIX_QUALIFIER;
+            int index = version.indexOf('-');
+            return version.substring(0, index) + SUFFIX_QUALIFIER;
+//            return version.substring(0, version.length() - SUFFIX_SNAPSHOT.length()) + SUFFIX_QUALIFIER;
         }
+
         return version;
     }
 

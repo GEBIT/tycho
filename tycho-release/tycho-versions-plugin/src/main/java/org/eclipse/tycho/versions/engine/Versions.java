@@ -19,13 +19,16 @@ public class Versions {
 
     private static final String SUFFIX_SNAPSHOT = "-SNAPSHOT";
 
+    // if you change this, also change SourcesBundleDependencyMetadataGenerator!
     public static String toCanonicalVersion(String version) {
         if (version == null) {
             return null;
         }
 
         if (version.endsWith(SUFFIX_SNAPSHOT)) {
-            return version.substring(0, version.length() - SUFFIX_SNAPSHOT.length()) + SUFFIX_QUALIFIER;
+            int index = version.indexOf('-');
+            return version.substring(0, index) + SUFFIX_QUALIFIER;
+//            return version.substring(0, version.length() - SUFFIX_SNAPSHOT.length()) + SUFFIX_QUALIFIER;
         }
 
         return version;
@@ -40,7 +43,9 @@ public class Versions {
         }
 
         if (version.endsWith(SUFFIX_SNAPSHOT)) {
-            return version.substring(0, version.length() - SUFFIX_SNAPSHOT.length());
+            int index = version.indexOf('-');
+            return version.substring(0, index);
+//            return version.substring(0, version.length() - SUFFIX_SNAPSHOT.length());
         }
         if (version.endsWith(SUFFIX_QUALIFIER)) {
             return version.substring(0, version.length() - SUFFIX_QUALIFIER.length());
@@ -49,8 +54,8 @@ public class Versions {
         return version;
     }
 
-    public static void assertIsOsgiVersion(String version) throws NumberFormatException, IllegalArgumentException,
-            NullPointerException {
+    public static void assertIsOsgiVersion(String version)
+            throws NumberFormatException, IllegalArgumentException, NullPointerException {
         new Version(version);
     }
 
