@@ -352,7 +352,7 @@ public class OsgiBundleProject extends AbstractTychoProject implements BundlePro
                 // add output folder even if it does not exist (yet)
                 classpath.add(outputJars.get(cp).getOutputDirectory());
             } else {
-                // no associated output folder 
+                // no associated output folder
                 // => assume it's checked into SCM or will be copied here later during build
                 classpath.add(new File(otherProject.getBasedir(), cp));
             }
@@ -399,13 +399,14 @@ public class OsgiBundleProject extends AbstractTychoProject implements BundlePro
                 } else {
                     entry = entry.trim();
                     File file = new File(project.getBasedir(), entry).getAbsoluteFile();
-                    if (file.exists()) {
+                    if (!file.exists()) {
+                        getLogger().warn("Missing extra classpath entry " + entry + ", attempting to reference it anyway.");
+                    }
                         List<File> locations = Collections.singletonList(file);
                         ArtifactKey projectKey = getArtifactKey(project);
                         classpath.add(new DefaultClasspathEntry(project, projectKey, locations, null));
-                    } else {
-                        getLogger().warn("Missing extra classpath entry " + entry);
-                    }
+//                    } else {
+//                    }
                 }
             }
         }
