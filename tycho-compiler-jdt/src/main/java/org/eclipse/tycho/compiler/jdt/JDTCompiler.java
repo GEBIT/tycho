@@ -26,6 +26,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.toolchain.Toolchain;
+import org.apache.maven.toolchain.ToolchainManager;
+import org.apache.maven.toolchain.java.DefaultJavaToolChain;
 import org.codehaus.plexus.compiler.AbstractCompiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerException;
@@ -68,6 +72,12 @@ public class JDTCompiler extends AbstractCompiler {
 
     @Requirement
     private JdkLibraryInfoProvider jdkLibInfoProvider;
+
+    @Requirement
+    private ToolchainManager toolchainManager;
+
+    @Requirement
+    private MavenSession session;
 
     public JDTCompiler() {
         super(CompilerOutputStyle.ONE_OUTPUT_FILE_PER_INPUT_FILE, ".java", ".class", null);
@@ -230,6 +240,12 @@ public class JDTCompiler extends AbstractCompiler {
             args.add(config.getSourceEncoding());
         }
 
+        Toolchain toolchain = getToolchain();
+        if (toolchain != null && toolchain instanceof DefaultJavaToolChain) {
+            custom.javaHome = ((DefaultJavaToolChain) toolchain).getJavaHome();
+            getLogger().warn("Use JDK " + custom.javaHome);
+        }
+
         Map<String, String> customCompilerArguments = config.getCustomCompilerArgumentsAsMap();
         for (Map.Entry<String, String> entry : customCompilerArguments.entrySet()) {
 
@@ -261,6 +277,11 @@ public class JDTCompiler extends AbstractCompiler {
         }
 
         return (String[]) args.toArray(new String[args.size()]);
+    }
+
+    protected final Toolchain getToolchain() {
+        Toolchain tc = toolchainManager.getToolchainFromBuildContext("jdk", session);
+        return tc;
     }
 
     private static boolean suppressSource(CompilerConfiguration config) {
